@@ -24,7 +24,6 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 2.0.0'
 
   gem.add_dependency 'gli', '~> 2.13.1'
-  gem.add_dependency 'pio', '~> 0.24.0'
   gem.add_dependency 'pry', '~> 0.10.1'
 
   # Docs
