@@ -47,8 +47,10 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'flay', '~> 2.6.1'
   gem.add_development_dependency 'flog', '~> 4.3.2'
   gem.add_development_dependency 'rake'
-  gem.add_development_dependency 'reek', '~> 3.7.1'
   gem.add_development_dependency 'rspec', '~> 3.4.0'
   gem.add_development_dependency 'rspec-given', '~> 3.7.1'
   gem.add_development_dependency 'rubocop', '~> 0.35.1'
+  if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.1')
+    gem.add_development_dependency 'reek', '~> 3.7.1'
+  end
 end
