@@ -22,6 +22,13 @@ Then(/^a vswitch named "(.*?)" should be running$/) do |name|
 end
 
 # rubocop:disable LineLength
+Then(/^a vswitch named "([^"]*)" \(controller ip = "(.*)"\) should be running$/) do |name, ip|
+  step %(a vswitch named "#{name}" should be running)
+  step %(the output should contain "ovs-vsctl set-controller br#{name} tcp:#{ip}:6653")
+end
+# rubocop:enable LineLength
+
+# rubocop:disable LineLength
 Then(/^a vswitch named "([^"]*)" \(controller port = (\d+)\) should be running$/) do |name, port_number|
   step %(a vswitch named "#{name}" should be running)
   step %(the output should contain "ovs-vsctl set-controller br#{name} tcp:127.0.0.1:#{port_number}")

@@ -32,6 +32,17 @@ Feature: The vswitch DSL directive.
     When I do phut run "network.conf"
     Then a vswitch named "0xabc" (controller port = 6653) should be running
 
+  Scenario: vswitch { dpid ...; ip IP_ADDRESS }
+    Given a file named "network.conf" with:
+    """
+    vswitch {
+      datapath_id 0xabc
+      ip "192.168.0.10"
+    }
+    """
+    When I do phut run "network.conf"
+    Then a vswitch named "0xabc" (controller ip = "192.168.0.10") should be running
+
   Scenario: vswitch { dpid ...; port NUMBER }
     Given a file named "network.conf" with:
     """

@@ -10,23 +10,24 @@ module Phut
   class OpenVswitch
     cattr_accessor(:all, instance_reader: false) { [] }
 
-    def self.create(dpid, port_number = 6653, name = nil,
-                    logger = NullLogger.new)
-      new(dpid, port_number, name, logger).tap do |vswitch|
+    def self.create(dpid, ip_address = '127.0.0.1', port_number = 6653,
+                    name = nil, logger = NullLogger.new)
+      new(dpid, ip_address, port_number, name, logger).tap do |vswitch|
         conflict = find_by(name: vswitch.name)
         fail "The name #{vswitch.name} conflicts with #{conflict}." if conflict
         all << vswitch
       end
     end
 
-    def self.dump_flows(dpid, port_number = 6653, name = nil,
-                        logger = NullLogger.new)
-      OpenVswitch.new(dpid, port_number, name, logger).dump_flows
+    def self.dump_flows(dpid, ip_address = '127.0.0.1', port_number = 6653,
+                        name = nil, logger = NullLogger.new)
+      OpenVswitch.new(dpid, ip_address, port_number,
+                      name, logger).dump_flows
     end
 
-    def self.shutdown(dpid, port_number = 6653, name = nil,
-                      logger = NullLogger.new)
-      OpenVswitch.new(dpid, port_number, name, logger).stop!
+    def self.shutdown(dpid, ip_address = '127.0.0.1', port_number = 6653,
+                      name = nil, logger = NullLogger.new)
+      OpenVswitch.new(dpid, ip_address, port_number, name, logger).stop!
     end
 
     def self.find_by(queries)
@@ -51,8 +52,9 @@ module Phut
     alias_method :datapath_id, :dpid
     attr_reader :network_devices
 
-    def initialize(dpid, port_number, name, logger)
+    def initialize(dpid, ip_address, port_number, name, logger)
       @dpid = dpid
+      @ip_address = ip_address ? ip_address : '127.0.0.1'
       @port_number = port_number
       @name = name
       @network_devices = []
@@ -79,7 +81,7 @@ module Phut
          " protocols=#{Pio::OpenFlow.version}" \
          " other-config:datapath-id=#{dpid_zero_filled}"
       sh "sudo ovs-vsctl set-controller #{bridge_name} "\
-         "tcp:127.0.0.1:#{@port_number} "\
+         "tcp:#{@ip_address}:#{@port_number} "\
          "-- set controller #{bridge_name} connection-mode=out-of-band"
       sh "sudo ovs-vsctl set-fail-mode #{bridge_name} secure"
     rescue

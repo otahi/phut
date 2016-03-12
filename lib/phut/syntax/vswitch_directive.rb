@@ -4,10 +4,13 @@ module Phut
   class Syntax
     # The 'vswitch(name) { ...attributes... }' directive.
     class VswitchDirective < Directive
+      attribute :ip
+      attribute :netmask
       attribute :port
 
       def initialize(alias_name, &block)
-        @attributes = { name: alias_name, port: 6653 }
+        @attributes =
+          { name: alias_name, ip: nil, netmask: '255.255.255.0', port: 6653 }
         instance_eval(&block)
       end
 
