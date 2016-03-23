@@ -27,5 +27,6 @@ group :test do
   gem 'rspec', '~> 3.4.0', require: false
   gem 'rspec-given', '~> 3.7.1', require: false
   gem 'rubocop', '~> 0.35.1', require: false
-  gem 'reek', '~> 3.7.1', platforms: [:ruby_21, :ruby_22, :ruby_23], require: false
+  gem 'reek', '~> 3.7.1',
+      platforms: [:ruby_21, :ruby_22, :ruby_23], require: false
 end
