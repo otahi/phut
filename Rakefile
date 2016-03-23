@@ -7,11 +7,6 @@ RELISH_PROJECT = 'trema/phut'
 task default: :test
 task test: [:spec, :cucumber, :quality]
 task travis: [:spec, 'cucumber:travis', :quality]
-
-if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.1')
-  task quality: [:rubocop, :reek, :flog, :flay]
-else
-  task quality: [:rubocop, :flog, :flay]
-end
+task quality: [:rubocop, :reek, :flog, :flay]
 
 Dir.glob('tasks/*.rake').each { |each| import each }
