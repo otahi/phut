@@ -38,6 +38,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'guard-cucumber', '~> 2.0.0'
   gem.add_development_dependency 'guard-rspec', '~> 4.6.4'
   gem.add_development_dependency 'guard-rubocop', '~> 1.2.0'
+  gem.add_development_dependency 'listen', '< 3.1.0'
 
   # Test
   gem.add_development_dependency 'aruba', '~> 0.11.2'
