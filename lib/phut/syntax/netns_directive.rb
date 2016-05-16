@@ -7,7 +7,7 @@ module Phut
       attribute :netmask
 
       def initialize(alias_name, &block)
-        @attributes = { name: alias_name }
+        @attributes = { name: alias_name, mac: nil, vlan: nil }
         instance_eval(&block)
       end
 
@@ -19,6 +19,14 @@ module Phut
       def route(options)
         @attributes[:net] = options.fetch(:net)
         @attributes[:gateway] = options.fetch(:gateway)
+      end
+
+      def mac(value)
+        @attributes[:mac] = value
+      end
+
+      def vlan(value)
+        @attributes[:vlan] = value
       end
     end
   end

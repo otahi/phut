@@ -31,8 +31,7 @@ module Phut
       sh "sudo ip netns add #{name}"
       sh "sudo ip link set dev #{network_device} netns #{name}"
       sh "sudo ip netns exec #{name} ifconfig lo 127.0.0.1"
-      sh "sudo ip netns exec #{name}"\
-         " ifconfig #{network_device} #{ip} netmask #{netmask}"
+      setup_interface
       sh "sudo ip netns exec #{name} route add -net #{net} gw #{gateway}"
     end
     # rubocop:enable AbcSize
@@ -43,6 +42,27 @@ module Phut
 
     def method_missing(message, *_args)
       @options.__send__ :[], message
+    end
+
+    private
+
+    def setup_interface
+      if vlan
+        sh "sudo ip netns exec #{name}"\
+          " ifconfig #{network_device} up"
+        sh "sudo ip netns exec #{name}"\
+          " ip link add link #{network_device} name"\
+          " #{network_device}.#{vlan} type vlan id #{vlan}"
+        sh "sudo ip netns exec #{name}"\
+          " ifconfig #{network_device}.#{vlan} #{ip} netmask #{netmask}"
+        sh "sudo ip netns exec #{name}"\
+          " ip link set #{network_device}.#{vlan} address #{mac}" if mac
+      else
+        sh "sudo ip netns exec #{name}"\
+          " ifconfig #{network_device} #{ip} netmask #{netmask}"
+        sh "sudo ip netns exec #{name}"\
+          " ip link set #{network_device} address #{mac}" if mac
+      end
     end
   end
 end
